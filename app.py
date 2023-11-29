@@ -3,6 +3,7 @@ from flask_smorest import Api
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 
+from routes import auth_blueprint
 from db import db
 
 
@@ -30,6 +31,8 @@ def create_app():
     config_error_handlers(app)
 
     app.config['SECRET_KEY'] = '9c9c2ff463c47cea625cf6652b9b2043'
+
+    api.register_blueprint(auth_blueprint)
 
     return app
 
