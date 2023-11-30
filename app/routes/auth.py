@@ -2,10 +2,10 @@ from flask import abort
 from flask_smorest import Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 
-from db import db
-from models.user import UserModel
+from app.db import db
+from app.models.user import UserModel
 from schemas import LoginSchema, LoginResponseSchema, RegisterSchema, UserSchema
-from utils.utils import verify_password, make_hash
+from app.utils.utils import verify_password, make_hash
 
 blp = Blueprint("Auth", __name__, url_prefix="/auth")
 
