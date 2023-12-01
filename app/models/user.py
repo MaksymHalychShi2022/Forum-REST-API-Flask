@@ -1,6 +1,8 @@
 from app.db import db
 import uuid
 
+from app.models.role import user_roles
+
 
 class UserModel(db.Model):
     __tablename__ = 'users'
@@ -9,3 +11,8 @@ class UserModel(db.Model):
     password = db.Column(db.String(150), nullable=False)
     username = db.Column(db.String(150), nullable=False)
     description = db.Column(db.String(1000), nullable=True)
+
+    roles = db.relationship('RoleModel', secondary=user_roles, back_populates='users')
+
+    def is_admin(self):
+        return any(role.name == 'Admin' for role in self.roles)

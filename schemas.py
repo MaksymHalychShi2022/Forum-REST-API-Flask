@@ -21,3 +21,9 @@ class UserSchema(Schema):
     email = fields.String(dump_only=True)
     username = fields.String()
     description = fields.String()
+
+
+class CategorySchema(Schema):
+    id = fields.String(dump_only=True)
+    title = fields.String(required=True)
+    description = fields.String()
