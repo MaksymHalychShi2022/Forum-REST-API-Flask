@@ -1,5 +1,6 @@
-from app.db import db
 import uuid
+
+from app.db import db
 
 user_roles = db.Table(
     'user_roles',

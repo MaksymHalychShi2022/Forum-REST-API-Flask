@@ -5,7 +5,7 @@ from flask_jwt_extended import JWTManager
 
 from .models.role import RoleModel
 from .models.user import UserModel
-from .routes import auth_blueprint, categories_blueprint
+from .routes import auth_blueprint, categories_blueprint, topics_blueprint
 from .db import db
 from config import DevelopmentConfig
 from .utils.utils import make_hash
@@ -24,6 +24,7 @@ def create_app(config_class=DevelopmentConfig):
 
     api.register_blueprint(auth_blueprint)
     api.register_blueprint(categories_blueprint)
+    api.register_blueprint(topics_blueprint)
 
     return app
 
