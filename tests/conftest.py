@@ -1,5 +1,6 @@
 import pytest
 from app import create_app, db
+from app.models.category import CategoryModel
 from app.models.user import UserModel
 from app.utils.utils import make_hash
 from config import TestingConfig
@@ -42,3 +43,11 @@ def test_user(init_database):
     db.session.add(user)
     db.session.commit()
     return user
+
+
+@pytest.fixture(scope="module")
+def test_category(init_database):
+    category = CategoryModel(title="test category")
+    db.session.add(category)
+    db.session.commit()
+    return category

@@ -1,6 +1,8 @@
+from . import login_as, login_as_admin
+
+
 def test_get_categories(client, init_database, test_user):
-    login_response = client.post("/auth/login", json={"email": "test@example.com", "password": "password"})
-    access_token = login_response.json["access_token"]
+    access_token = login_as(client, test_user.email)
 
     headers = {"Authorization": f"Bearer {access_token}"}
     response = client.get("/categories", headers=headers)
@@ -8,8 +10,7 @@ def test_get_categories(client, init_database, test_user):
 
 
 def test_create_category(client, init_database):
-    login_response = client.post("/auth/login", json={"email": "admin@example.com", "password": "password"})
-    access_token = login_response.json["access_token"]
+    access_token = login_as_admin(client)
 
     new_category = {"title": "New Category", "description": "Description of new category"}
     headers = {"Authorization": f"Bearer {access_token}"}
