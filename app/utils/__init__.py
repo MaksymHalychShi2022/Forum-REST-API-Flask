@@ -17,7 +17,7 @@ def custom_jwt_required(is_admin=False):
                     abort(404, description="User not found")
 
                 if not current_user.is_admin():
-                    abort(403, descripion="Forbidden")
+                    abort(403, description="Forbidden")
 
             return fn(*args, **kwargs)
 
