@@ -30,7 +30,7 @@ class CategorySchema(Schema):
 
 
 class TopicContextSchema(Schema):
-    category_id = fields.String()
+    category_id = fields.String(required=True)
 
 
 class TopicSchema(TopicContextSchema):
@@ -42,9 +42,12 @@ class TopicSchema(TopicContextSchema):
     user_id = fields.String(dump_only=True)
 
 
-class CommentSchema(Schema):
+class CommentContextSchema(Schema):
+    topic_id = fields.String(required=True)
+
+
+class CommentSchema(CommentContextSchema):
     id = fields.String(dump_only=True)
     body = fields.String(required=True)
     created_at = fields.DateTime(dump_only=True)
-    user_id = fields.String()
-    topic_id = fields.String()
+    user_id = fields.String(dump_only=True)
