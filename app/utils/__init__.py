@@ -10,11 +10,7 @@ def custom_jwt_required(is_admin=False):
         @jwt_required()
         def decorator(*args, **kwargs):
             if is_admin:
-                current_user_id = get_jwt_identity()
-                current_user = UserModel.query.get(current_user_id)
-
-                if not current_user:
-                    abort(404, description="User not found")
+                current_user = UserModel.query.get_or_404(get_jwt_identity(), description="User not found")
 
                 if not current_user.is_admin():
                     abort(403, description="Forbidden")

@@ -19,7 +19,6 @@ def test_get_user(client, init_database, test_user):
     headers = {"Authorization": f"Bearer {access_token}"}
     response = client.get("/auth/user", headers=headers)
     assert response.status_code == 200
-    # Add more assertions based on your user data
 
 
 def test_update_user(client, init_database, test_user):

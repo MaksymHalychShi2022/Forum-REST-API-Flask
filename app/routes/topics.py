@@ -26,9 +26,12 @@ def get_topics(topic_context):
 def create_topic(topic_data):
     category = CategoryModel.query.get_or_404(topic_data["category_id"], description="Category not found")
 
-    new_topic = TopicModel(title=topic_data["title"], body=topic_data["body"])
-    new_topic.category = category
-    new_topic.user_id = get_jwt_identity()
+    new_topic = TopicModel(
+        title=topic_data["title"],
+        body=topic_data["body"],
+        category=category,
+        user_id=get_jwt_identity()
+    )
 
     db.session.add(new_topic)
     db.session.commit()

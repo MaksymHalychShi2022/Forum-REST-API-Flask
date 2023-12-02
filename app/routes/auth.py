@@ -45,7 +45,7 @@ def register(register_data):
 @blp.response(200, schema=UserSchema)
 @jwt_required()
 def get_user():
-    return UserModel.query.get_or_404(get_jwt_identity())
+    return UserModel.query.get_or_404(get_jwt_identity(), description="User not found")
 
 
 @blp.route("/user", methods=["PUT", "PATCH"])
@@ -53,7 +53,7 @@ def get_user():
 @blp.response(200, schema=UserSchema)
 @jwt_required()
 def update_user(user_data):
-    user = UserModel.query.get_or_404(get_jwt_identity())
+    user = UserModel.query.get_or_404(get_jwt_identity(), description="User not found")
     for key, value in user_data.items():
         setattr(user, key, value)
 

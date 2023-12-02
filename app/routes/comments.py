@@ -30,9 +30,11 @@ def create_comment(comment_data):
     if topic.closed:
         abort(400, description="Topic is closed")
 
-    new_comment = CommentModel(body=comment_data["body"])
-    new_comment.topic = topic
-    new_comment.user_id = get_jwt_identity()
+    new_comment = CommentModel(
+        body=comment_data["body"],
+        topic=topic,
+        user_id=get_jwt_identity()
+    )
 
     db.session.add(new_comment)
     db.session.commit()
