@@ -90,3 +90,15 @@ def config_error_handlers(app):
         response = jsonify({"message": error.description})
         response.status_code = 401
         return response
+
+    @app.errorhandler(403)
+    def unauthorized(error):
+        response = jsonify({"message": error.description})
+        response.status_code = 403
+        return response
+
+    @app.errorhandler(404)
+    def unauthorized(error):
+        response = jsonify({"message": error.description})
+        response.status_code = 404
+        return response

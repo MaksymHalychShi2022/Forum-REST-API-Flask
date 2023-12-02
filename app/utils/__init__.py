@@ -14,12 +14,10 @@ def custom_jwt_required(is_admin=False):
                 current_user = UserModel.query.get(current_user_id)
 
                 if not current_user:
-                    abort(401)
+                    abort(404, description="User not found")
 
                 if not current_user.is_admin():
-                    print(current_user.email)
-                    print(current_user.roles)
-                    abort(403)
+                    abort(403, descripion="Forbidden")
 
             return fn(*args, **kwargs)
 
