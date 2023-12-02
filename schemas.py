@@ -37,3 +37,11 @@ class TopicSchema(Schema):
     created_at = fields.DateTime(dump_only=True)
     user_id = fields.String()
     category_id = fields.String()
+
+
+class CommentSchema(Schema):
+    id = fields.String(dump_only=True)
+    body = fields.String(required=True)
+    created_at = fields.DateTime(dump_only=True)
+    user_id = fields.String()
+    topic_id = fields.String()
