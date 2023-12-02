@@ -29,14 +29,17 @@ class CategorySchema(Schema):
     description = fields.String()
 
 
-class TopicSchema(Schema):
+class TopicContextSchema(Schema):
+    category_id = fields.String()
+
+
+class TopicSchema(TopicContextSchema):
     id = fields.String(dump_only=True)
     title = fields.String(required=True)
     body = fields.String(required=True)
     closed = fields.Boolean()
     created_at = fields.DateTime(dump_only=True)
-    user_id = fields.String()
-    category_id = fields.String()
+    user_id = fields.String(dump_only=True)
 
 
 class CommentSchema(Schema):
