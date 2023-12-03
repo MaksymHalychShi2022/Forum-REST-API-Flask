@@ -41,11 +41,12 @@ def test_update_comment(client, init_database, test_user, test_comment):
     assert response.json["body"] == updated_data["body"]
 
 
-def test_update_comment(client, init_database, test_user, test_comment):
+def test_delete_comment(client, init_database, test_user, test_comment):
     access_token = login_as(client, test_user.email)
     headers = {"Authorization": f"Bearer {access_token}"}
 
-    updated_data = {"body": "Updated comment body"}
-    response = client.put(f"/comments/{test_comment.id}", headers=headers, json=updated_data)
-    assert response.status_code == 200
-    assert response.json["body"] == updated_data["body"]
+    response = client.delete(f"/comments/{test_comment.id}", headers=headers)
+    assert response.status_code == 204
+
+    response = client.get(f"/comments/{test_comment.id}", headers=headers)
+    assert response.status_code == 404

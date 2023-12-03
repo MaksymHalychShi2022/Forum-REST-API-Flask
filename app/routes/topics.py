@@ -5,7 +5,7 @@ from app.db import db
 from app.models.category import CategoryModel
 from app.models.topic import TopicModel
 from app.utils import custom_jwt_required
-from schemas import TopicSchema, TopicContextSchema
+from schemas import TopicSchema, TopicContextSchema, TopicWithContextSchema
 
 blp = Blueprint("Topics", __name__, url_prefix="/topics")
 
@@ -20,8 +20,8 @@ def get_topics(topic_context):
 
 
 @blp.route("", methods=["POST"])
-@blp.arguments(TopicSchema)
-@blp.response(201, schema=TopicSchema)
+@blp.arguments(TopicWithContextSchema)
+@blp.response(201, schema=TopicWithContextSchema)
 @custom_jwt_required(is_admin=True)
 def create_topic(topic_data):
     category = CategoryModel.query.get_or_404(topic_data["category_id"], description="Category not found")
@@ -40,15 +40,15 @@ def create_topic(topic_data):
 
 
 @blp.route("/<topic_id>", methods=["GET"])
-@blp.response(200, schema=TopicSchema)
+@blp.response(200, schema=TopicWithContextSchema)
 @custom_jwt_required()
 def get_topic(topic_id):
     return TopicModel.query.get_or_404(topic_id, description="Topic not found")
 
 
 @blp.route("/<topic_id>", methods=["PUT", "PATCH"])
-@blp.arguments(TopicSchema(exclude=("category_id",)), as_kwargs=True)
-@blp.response(200, schema=TopicSchema)
+@blp.arguments(TopicSchema, as_kwargs=True)
+@blp.response(200, schema=TopicWithContextSchema)
 @custom_jwt_required(is_admin=True)
 def update_topic(topic_id, **topic_data):
     topic = TopicModel.query.get_or_404(topic_id, description="Topic not found")

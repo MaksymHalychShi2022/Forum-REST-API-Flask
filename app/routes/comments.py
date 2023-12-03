@@ -7,7 +7,7 @@ from app.models.user import UserModel
 from app.models.comment import CommentModel
 from app.models.topic import TopicModel
 from app.utils import custom_jwt_required
-from schemas import CommentSchema, CommentContextSchema
+from schemas import CommentSchema, CommentContextSchema, CommentWithContextSchema
 
 blp = Blueprint("Comments", __name__, url_prefix="/comments")
 
@@ -22,8 +22,8 @@ def get_comments(comment_context):
 
 
 @blp.route("", methods=["POST"])
-@blp.arguments(CommentSchema)
-@blp.response(201, schema=CommentSchema)
+@blp.arguments(CommentWithContextSchema)
+@blp.response(201, schema=CommentWithContextSchema)
 @custom_jwt_required()
 def create_comment(comment_data):
     topic = TopicModel.query.get_or_404(comment_data["topic_id"], description="Topic not found")
@@ -44,15 +44,15 @@ def create_comment(comment_data):
 
 
 @blp.route("/<comment_id>", methods=["GET"])
-@blp.response(200, schema=CommentSchema)
+@blp.response(200, schema=CommentWithContextSchema)
 @custom_jwt_required()
 def get_comment(comment_id):
     return CommentModel.query.get_or_404(comment_id, description="Comment not found")
 
 
 @blp.route("/<comment_id>", methods=["PUT", "PATCH"])
-@blp.arguments(CommentSchema(exclude=("topic_id",)), as_kwargs=True)
-@blp.response(200, schema=CommentSchema)
+@blp.arguments(CommentSchema, as_kwargs=True)
+@blp.response(200, schema=CommentWithContextSchema)
 @custom_jwt_required()
 def update_comment(comment_id, **comment_data):
     comment = CommentModel.query.get_or_404(comment_id, description="Comment not found")
