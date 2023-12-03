@@ -3,6 +3,7 @@ from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
 from app.db import db
+from app.models.user import UserModel
 from app.models.comment import CommentModel
 from app.models.topic import TopicModel
 from app.utils import custom_jwt_required
@@ -40,3 +41,40 @@ def create_comment(comment_data):
     db.session.commit()
 
     return new_comment
+
+
+@blp.route("/<comment_id>", methods=["GET"])
+@blp.response(200, schema=CommentSchema)
+@custom_jwt_required()
+def get_comment(comment_id):
+    return CommentModel.query.get_or_404(comment_id, description="Comment not found")
+
+
+@blp.route("/<comment_id>", methods=["PUT", "PATCH"])
+@blp.arguments(CommentSchema(exclude=("topic_id",)), as_kwargs=True)
+@blp.response(200, schema=CommentSchema)
+@custom_jwt_required()
+def update_comment(comment_id, **comment_data):
+    comment = CommentModel.query.get_or_404(comment_id, description="Comment not found")
+    current_user = UserModel.query.get_or_404(get_jwt_identity(), description="User not found")
+
+    if comment.user_id != current_user.id and not current_user.is_admin():
+        abort(403, description="Forbidden")
+
+    comment.body = comment_data["body"]
+    db.session.commit()
+    return comment
+
+
+@blp.route("/<string:comment_id>", methods=["DELETE"])
+@blp.response(204)
+@custom_jwt_required()
+def delete_comment(comment_id):
+    comment = CommentModel.query.get_or_404(comment_id, description="Comment not found")
+    current_user = UserModel.query.get_or_404(get_jwt_identity(), description="User not found")
+
+    if comment.user_id != current_user.id and not current_user.is_admin():
+        abort(403, description="Forbidden")
+
+    db.session.delete(comment)
+    db.session.commit()
