@@ -37,3 +37,34 @@ def create_topic(topic_data):
     db.session.commit()
 
     return new_topic
+
+
+@blp.route("/<topic_id>", methods=["GET"])
+@blp.response(200, schema=TopicSchema)
+@custom_jwt_required()
+def get_topic(topic_id):
+    return TopicModel.query.get_or_404(topic_id, description="Topic not found")
+
+
+@blp.route("/<topic_id>", methods=["PUT", "PATCH"])
+@blp.arguments(TopicSchema(exclude=("category_id",)), as_kwargs=True)
+@blp.response(200, schema=TopicSchema)
+@custom_jwt_required(is_admin=True)
+def update_topic(topic_id, **topic_data):
+    topic = TopicModel.query.get_or_404(topic_id, description="Topic not found")
+
+    for key, value in topic_data.items():
+        setattr(topic, key, value)
+
+    db.session.commit()
+    return topic
+
+
+@blp.route("/<topic_id>", methods=["DELETE"])
+@blp.response(204)
+@custom_jwt_required(is_admin=True)
+def delete_topic(topic_id):
+    topic = TopicModel.query.get_or_404(topic_id, description="Topic not found")
+
+    db.session.delete(topic)
+    db.session.commit()
