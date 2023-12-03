@@ -1,10 +1,11 @@
 from flask import abort
 from flask_smorest import Blueprint
 
-from app.db import db
+from app.extensions.database import db
+from app.extensions.jwt.decorators import custom_jwt_required
 from app.models.category import CategoryModel
-from app.utils import custom_jwt_required
-from schemas import CategorySchema
+from app.schemas.category import CategorySchema
+
 
 blp = Blueprint("Categories", __name__, url_prefix="/categories")
 

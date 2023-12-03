@@ -1,11 +1,12 @@
 from flask import abort
 from flask_smorest import Blueprint
-from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
+from flask_jwt_extended import get_jwt_identity, create_access_token
 
-from app.db import db
+from app.extensions.database import db
+from app.extensions.jwt.decorators import custom_jwt_required
 from app.models.user import UserModel
-from schemas import LoginSchema, LoginResponseSchema, RegisterSchema, UserSchema
-from app.utils.utils import verify_password, make_hash
+from app.schemas.auth import LoginSchema, LoginResponseSchema, RegisterSchema, UserSchema
+from app.utils.auth import verify_password, make_hash
 
 blp = Blueprint("Auth", __name__, url_prefix="/auth")
 
@@ -43,7 +44,7 @@ def register(register_data):
 
 @blp.route("/user", methods=["GET"])
 @blp.response(200, schema=UserSchema)
-@jwt_required()
+@custom_jwt_required()
 def get_user():
     return UserModel.query.get_or_404(get_jwt_identity(), description="User not found")
 
@@ -51,7 +52,7 @@ def get_user():
 @blp.route("/user", methods=["PUT", "PATCH"])
 @blp.arguments(UserSchema)
 @blp.response(200, schema=UserSchema)
-@jwt_required()
+@custom_jwt_required()
 def update_user(user_data):
     user = UserModel.query.get_or_404(get_jwt_identity(), description="User not found")
     for key, value in user_data.items():

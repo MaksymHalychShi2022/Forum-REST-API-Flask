@@ -2,12 +2,12 @@ from flask import abort
 from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
-from app.db import db
+from app.extensions.database import db
+from app.extensions.jwt.decorators import custom_jwt_required
 from app.models.user import UserModel
 from app.models.comment import CommentModel
 from app.models.topic import TopicModel
-from app.utils import custom_jwt_required
-from schemas import CommentSchema, CommentContextSchema, CommentWithContextSchema
+from app.schemas.comment import CommentSchema, CommentContextSchema, CommentWithContextSchema
 
 blp = Blueprint("Comments", __name__, url_prefix="/comments")
 

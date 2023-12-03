@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from app.db import db
+from app.extensions.database import db
 
 
 class CommentModel(db.Model):

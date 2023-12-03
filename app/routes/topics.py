@@ -1,11 +1,11 @@
 from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
-from app.db import db
+from app.extensions.database import db
+from app.extensions.jwt.decorators import custom_jwt_required
 from app.models.category import CategoryModel
 from app.models.topic import TopicModel
-from app.utils import custom_jwt_required
-from schemas import TopicSchema, TopicContextSchema, TopicWithContextSchema
+from app.schemas.topic import TopicSchema, TopicContextSchema, TopicWithContextSchema
 
 blp = Blueprint("Topics", __name__, url_prefix="/topics")
 

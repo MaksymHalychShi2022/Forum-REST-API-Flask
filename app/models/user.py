@@ -1,6 +1,6 @@
 import uuid
 
-from app.db import db
+from app.extensions.database import db
 from app.models.role import user_roles
 
 

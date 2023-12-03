@@ -1,11 +1,12 @@
 import pytest
-from app import create_app, db
+from app import create_app
+from app.extensions.database import db
 from app.models.category import CategoryModel
 from app.models.topic import TopicModel
 from app.models.user import UserModel
 from app.models.comment import CommentModel
-from app.utils.utils import make_hash
-from config import TestingConfig
+from app.utils.auth import make_hash
+from app.extensions.config import TestingConfig
 
 
 @pytest.fixture(scope='module')
