@@ -13,7 +13,7 @@ class TopicModel(db.Model):
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
     user_id = db.Column(db.String(36), db.ForeignKey('users.id'))
-    category_id = db.Column(db.String(36), db.ForeignKey('categories.id'))
+    category_id = db.Column(db.String(36), db.ForeignKey('categories.id', ondelete='CASCADE'))
 
     user = db.relationship("UserModel", backref="topics")
     category = db.relationship("CategoryModel", backref="topics")

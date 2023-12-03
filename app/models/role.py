@@ -5,7 +5,7 @@ from app.db import db
 user_roles = db.Table(
     'user_roles',
     db.Column('user_id', db.String(36), db.ForeignKey('users.id'), primary_key=True),
-    db.Column('role_id', db.String(36), db.ForeignKey('roles.id'), primary_key=True)
+    db.Column('role_id', db.String(36), db.ForeignKey('roles.id', ondelete='RESTRICT'), primary_key=True)
 )
 
 

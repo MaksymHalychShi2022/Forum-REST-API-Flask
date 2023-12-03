@@ -11,7 +11,7 @@ class CommentModel(db.Model):
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
     user_id = db.Column(db.String(36), db.ForeignKey('users.id'))
-    topic_id = db.Column(db.String(36), db.ForeignKey('topics.id'))
+    topic_id = db.Column(db.String(36), db.ForeignKey('topics.id', ondelete='CASCADE'))
 
     user = db.relationship("UserModel", backref="comments")
     topic = db.relationship("TopicModel", backref="comments")
