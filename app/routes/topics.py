@@ -1,5 +1,6 @@
 from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
+from flask import request
 
 from app.extensions.database import db
 from app.extensions.jwt.decorators import custom_jwt_required
@@ -11,11 +12,12 @@ blp = Blueprint("Topics", __name__, url_prefix="/topics")
 
 
 @blp.route("", methods=["GET"])
-@blp.arguments(TopicContextSchema)
+# @blp.arguments(TopicContextSchema)
 @blp.response(200, schema=TopicSchema(many=True))
-@custom_jwt_required()
-def get_topics(topic_context):
-    category = CategoryModel.query.get_or_404(topic_context["category_id"], description="Category not found")
+# @custom_jwt_required()
+def get_topics():
+    category_id = request.args.get('category_id')
+    category = CategoryModel.query.get_or_404(category_id, description="Category not found")
     return category.topics
 
 

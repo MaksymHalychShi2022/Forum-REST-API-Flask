@@ -12,7 +12,7 @@ blp = Blueprint("Categories", __name__, url_prefix="/categories")
 
 @blp.route("", methods=["GET"])
 @blp.response(200, schema=CategorySchema(many=True))
-@custom_jwt_required()
+# @custom_jwt_required()
 def get_categories():
     return CategoryModel.query.all()
 

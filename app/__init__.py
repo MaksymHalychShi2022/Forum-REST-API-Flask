@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 
 from .extensions import jwt, db, api
 from .extensions.config import DevelopmentConfig
@@ -6,6 +7,7 @@ from .extensions.config import DevelopmentConfig
 
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
+    CORS(app)
     app.config.from_object(config_class)
 
     jwt.init_app(app)

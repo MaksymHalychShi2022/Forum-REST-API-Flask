@@ -1,4 +1,4 @@
-from flask import abort
+from flask import abort, request
 from flask_jwt_extended import get_jwt_identity
 from flask_smorest import Blueprint
 
@@ -13,11 +13,12 @@ blp = Blueprint("Comments", __name__, url_prefix="/comments")
 
 
 @blp.route("", methods=["GET"])
-@blp.arguments(CommentContextSchema)
+# @blp.arguments(CommentContextSchema)
 @blp.response(200, schema=CommentSchema(many=True))
-@custom_jwt_required()
-def get_comments(comment_context):
-    topic = TopicModel.query.get_or_404(comment_context["topic_id"], description="Topic not found")
+# @custom_jwt_required()
+def get_comments():
+    topic_id = request.args.get('topic_id')
+    topic = TopicModel.query.get_or_404(topic_id, description="Topic not found")
     return topic.comments
 
 

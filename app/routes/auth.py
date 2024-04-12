@@ -5,7 +5,7 @@ from flask_jwt_extended import get_jwt_identity, create_access_token
 from app.extensions.database import db
 from app.extensions.jwt.decorators import custom_jwt_required
 from app.models.user import UserModel
-from app.schemas.auth import LoginSchema, LoginResponseSchema, RegisterSchema, UserSchema
+from app.schemas.auth import LoginSchema, LoginResponseSchema, RegisterSchema, UserSchema, UserWithRolesSchema
 from app.utils.auth import verify_password, make_hash
 
 blp = Blueprint("Auth", __name__, url_prefix="/auth")
@@ -43,7 +43,7 @@ def register(register_data):
 
 
 @blp.route("/user", methods=["GET"])
-@blp.response(200, schema=UserSchema)
+@blp.response(200, schema=UserWithRolesSchema)
 @custom_jwt_required()
 def get_user():
     return UserModel.query.get_or_404(get_jwt_identity(), description="User not found")
@@ -51,7 +51,7 @@ def get_user():
 
 @blp.route("/user", methods=["PUT", "PATCH"])
 @blp.arguments(UserSchema)
-@blp.response(200, schema=UserSchema)
+@blp.response(200, schema=UserWithRolesSchema)
 @custom_jwt_required()
 def update_user(user_data):
     user = UserModel.query.get_or_404(get_jwt_identity(), description="User not found")
